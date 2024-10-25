@@ -10,7 +10,7 @@ export default function Office() {
         <div className="h-screen w-screen">
             <Canvas
                 shadows
-                className="bg-lightblue"
+                className="bg-white"
                 dpr={[1, 2]} 
                 camera={{ fov: 50 }}
             >
