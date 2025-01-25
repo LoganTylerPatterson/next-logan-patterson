@@ -1,27 +1,19 @@
 {
-  "name": "haven",
-  "version": "0.1.0",
-  "private": true,
+  "name": "logan_patterson",
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "npm run build && next dev",
-    "build": "next build",
-    "start": "npm run build && next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@react-three/drei": "^9.112.0",
-    "@react-three/fiber": "^8.17.7",
-    "@types/three": "^0.168.0",
-    "next": "14.2.7",
-    "react": "^18",
-    "react-dom": "^18",
-    "styled-components": "^6.1.13",
-    "three": "^0.168.0"
+    "dev": "vite",
+    "build": "vite build"
   },
   "devDependencies": {
-    "eslint": "^8",
-    "eslint-config-next": "14.2.7",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "vite": "^5.3.3",
+    "vite-plugin-restart": "^0.4.1",
+    "vite-plugin-glsl": "^1.3.0"
+  },
+  "dependencies": {
+    "lil-gui": "^0.19.2",
+    "three": "^0.166.1"
   }
 }
