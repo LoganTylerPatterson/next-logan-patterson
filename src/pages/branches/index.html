@@ -1,21 +1,34 @@
-<html lang="en"><head>
+<html lang="en">
+
+<head>
     <title>Branching - 01</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <style type="text/css">
-        body
-        {
+        body {
             background-color: #000000;
             margin: 0px;
             overflow: hidden;
         }
-        
+        #instructions {
+            position:absolute;
+            top: 40px;
+            left: 50vw;
+            color: white;
+        }
+        #warning {
+            position:absolute;
+            top: 10px;
+            left: 50vw;
+            color: white;
+        }
     </style>
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-VV3WNJLYL9"></script></head>
+</head>
+
 <body>
-    
-    <div id="container">
-    </div>
+    <div id="warning">Under Construction</div>
+    <div id="instructions">Click Anywhere</div>
+    <div id="container"></div>
 
     <script type="text/javascript">
 
@@ -27,11 +40,11 @@
         var selectedColor = "#ff0"
 
         init();
-        setInterval(loop, 1000/60);
+        setInterval(loop, 1000 / 60);
 
         function init() {
             container = document.getElementById('container');
-            
+
             WIDTH = window.innerWidth;
             HEIGHT = window.innerHeight;
 
@@ -93,7 +106,7 @@
         }
 
         function getRandomBrightColor() {
-            const minBrightness = 100; // Minimum brightness for each RGB channel
+            const minBrightness = 50;
             const r = Math.floor(Math.random() * (256 - minBrightness) + minBrightness);
             const g = Math.floor(Math.random() * (256 - minBrightness) + minBrightness);
             const b = Math.floor(Math.random() * (256 - minBrightness) + minBrightness);
@@ -101,8 +114,7 @@
         }
 
 
-        var Branch = function(x, y, max_life)
-        {
+        var Branch = function (x, y, max_life) {
             this.life = 0;
             this.max_life = max_life;
             this.speed = Math.random() + 1;
@@ -110,6 +122,8 @@
             this.y = y;
             this.rw = Math.random() * 360;
         }
-    
+
     </script>
-</body></html>
+</body>
+
+</html>
