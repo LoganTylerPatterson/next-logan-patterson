@@ -116,11 +116,12 @@ const FlowGame = ({ difficulty, onRestart }) => {
 
 	useEffect(() => {
 		if (grid.length <= 0 || grid.some(row => row.some(cell => cell === null))) {
-			console.log("fuck")
 			return;
 		}
-		alert("You Won!");
-		initializeGame();
+		setTimeout(() => {
+			alert("You Won!");
+			initializeGame();
+		}, 300);
 	}, [grid])
 
 	useEffect(() => {

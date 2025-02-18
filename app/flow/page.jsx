@@ -28,13 +28,13 @@ function Flow() {
             >
               🌟 Medium
             </button>
-            <button
+            {/* <button
               onClick={() => setDifficulty('hard')}
               className="bg-rose-600 text-gray-100 py-2 px-8 w-64
                 rounded-xl text-xl font-semibold"
             >
               🔥 Hard
-            </button>
+            </button> */}
           </div>
         </div>
       ) : (
