@@ -1,20 +1,26 @@
 {
-  "name": "logan_patterson",
-  "private": false,
-  "version": "0.0.0",
-  "type": "module",
+  "name": "logan-patterson",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "devDependencies": {
-    "vite": "^5.3.3",
-    "vite-plugin-restart": "^0.4.1",
-    "vite-plugin-glsl": "^1.3.0"
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "deploy": "vercel --prod"
   },
   "dependencies": {
-    "lil-gui": "^0.19.2",
-    "three": "^0.166.1"
+    "@tailwindcss/postcss": "^4.0.5",
+    "next": "15.1.6",
+    "postcss": "^8.5.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.0.5",
+    "vercel": "^41.1.4"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.1.6"
   }
 }

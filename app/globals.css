@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+/* purple-color: #a020f0 */
+/* white-color: #f5e7fd */
+/* dark-grey: #3b3b3b */
