@@ -52,7 +52,7 @@ export default function Home() {
           <Link href="/flow" className="group">
             <div className="bg-[#f8f1f6] rounded-lg p-6 transition-all duration-300 hover:bg-[#cccace] hover:shadow-md hover:shadow-[#cccace]">
               <h3 className="text-xl font-medium text-[#a020f0]">
-                FlowGame
+                FlowGame (under construction)
               </h3>
               <p className="text-[#3b3b3b] mb-4">
                 A personal spin of a classic game to explore hamiltonian paths(mobile only)
