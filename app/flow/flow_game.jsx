@@ -241,28 +241,29 @@ const FlowGame = ({ difficulty, onRestart }) => {
 
 	const handleMouseDown = (e) => {
 		e.preventDefault();
+		setIsTouching(true);
 		const cell = getCellFromEvent(e);
 		if (cell) handleStartPath(cell.row, cell.col);
 	};
 
 	const handleMouseMove = (e) => {
 		e.preventDefault();
-		if (!selectedColor) return;
+		if (!isTouching) return;
 		const cell = getCellFromEvent(e);
 		if (cell) handleExtendPath(cell.row, cell.col);
 	};
 
 	const handleMouseUp = (e) => {
 		e.preventDefault();
+		setIsTouching(false);
 		handleEndPath();
 	};
 
 	const size = DIFFICULTY_SETTINGS[difficulty].size;
-
 	return (
 		<div className="flex flex-col items-center p-4 bg-gray-900 rounded-2xl shadow-2xl border border-gray-700">
 			<div
-				className="grid bg-gray-800 p-[1vmin] gap-[1vmin] touch-none"
+				className="grid gap-[1vmin] touch-none"
 				style={{
 					gridTemplateColumns: `repeat(${size}, 1fr)`,
 					width: `calc(${size} * 12vmin + ${size - 1} * 1vmin)`,
@@ -271,20 +272,23 @@ const FlowGame = ({ difficulty, onRestart }) => {
 				onTouchStart={handleTouchStart}
 				onTouchMove={handleTouchMove}
 				onTouchEnd={handleTouchEnd}
+				onPointerDown={handleMouseDown}
+				onPointerMove={handleMouseMove}
+				onPointerUp={handleMouseUp}
 			>
 				{grid.map((row, i) =>
 					row.map((cell, j) => (
 						<div
 							key={`${i}-${j}`}
-							className={`relative flex justify-center items-center w-[12vmin] h-[12vmin] md:w-[15vmin] md:h-[15vmin] transition-all duration-200 ${currentPath.some(([r, c]) => r === i && c === j)
+							className={`relative flex justify-center items-center w-[12vmin] h-[12vmin] transition-all duration-200 ${currentPath.some(([r, c]) => r === i && c === j)
 								? 'bg-opacity-30 shadow-[0_0_15px]'
 								: 'bg-gray-700 hover:bg-gray-600'
 								}`}
 							style={{
-								backgroundColor: grid[i][j] !== null
+								backgroundColor: grid[i][j] !== null 
 									? `${grid[i][j]}`
 									: undefined,
-								shadowColor: grid[i][j] !== null
+								shadowColor: grid[i][j] !== null 
 									? `${grid[i][j]}`
 									: 'transparent'
 							}}

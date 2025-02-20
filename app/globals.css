@@ -6,6 +6,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 
 /* purple-color: #a020f0 */
 /* white-color: #f5e7fd */
