@@ -239,26 +239,6 @@ const FlowGame = ({ difficulty, onRestart }) => {
 		handleEndPath();
 	};
 
-	const handleMouseDown = (e) => {
-		e.preventDefault();
-		setIsTouching(true);
-		const cell = getCellFromEvent(e);
-		if (cell) handleStartPath(cell.row, cell.col);
-	};
-
-	const handleMouseMove = (e) => {
-		e.preventDefault();
-		if (!isTouching) return;
-		const cell = getCellFromEvent(e);
-		if (cell) handleExtendPath(cell.row, cell.col);
-	};
-
-	const handleMouseUp = (e) => {
-		e.preventDefault();
-		setIsTouching(false);
-		handleEndPath();
-	};
-
 	const size = DIFFICULTY_SETTINGS[difficulty].size;
 	return (
 		<div className="flex flex-col items-center p-4 bg-gray-900 rounded-2xl shadow-2xl border border-gray-700">
@@ -272,9 +252,9 @@ const FlowGame = ({ difficulty, onRestart }) => {
 				onTouchStart={handleTouchStart}
 				onTouchMove={handleTouchMove}
 				onTouchEnd={handleTouchEnd}
-				onPointerDown={handleMouseDown}
-				onPointerMove={handleMouseMove}
-				onPointerUp={handleMouseUp}
+				onPointerDown={handleTouchStart}
+				onPointerMove={handleTouchMove}
+				onPointerUp={handleTouchEnd}
 			>
 				{grid.map((row, i) =>
 					row.map((cell, j) => (
