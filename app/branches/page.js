@@ -74,6 +74,7 @@ export default function Branches() {
 
 	return (
 		<>
+			<p className="absolute top-4 w-full text-center text-white">Click Anywhere</p>
         	<canvas ref={canvasRef} onClick={createBranch} className="w-screen h-schreen"/>
 		</>
 	)

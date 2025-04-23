@@ -35,6 +35,20 @@ export default function Home() {
             </div>
           </Link>
           
+          <Link href="https://graph-six-rho.vercel.app/" className="group">
+            <div className="bg-[#f8f1f6] rounded-lg p-6 transition-all duration-300 hover:bg-[#cccace] hover:shadow-md hover:shadow-[#cccace]">
+              <h3 className="text-xl font-medium text-[#a020f0]">
+                Shader Graph
+              </h3>
+              <p className="text-[#3b3b3b] mb-4">
+                3d graph of different functions
+              </p>
+              <span className="text-[#a020f0] text-sm group-hover:underline">
+                View project →
+              </span>
+            </div>
+          </Link>
+          
           <Link href="/branches" className="group">
             <div className="bg-[#f8f1f6] rounded-lg p-6 transition-all duration-300 hover:bg-[#cccace] hover:shadow-md hover:shadow-[#cccace]">
               <h3 className="text-xl font-medium text-[#a020f0]">
