@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
-import ProjectPreview from "@/components/ProjectPreview";
 import { useState } from "react";
+import ProjectPreview from "../components/ProjectPreview";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
