@@ -15,7 +15,7 @@
     "@react-three/postprocessing": "^3.0.4",
     "@tailwindcss/postcss": "^4.0.5",
     "feather-icons": "^4.29.2",
-    "next": "15.1.6",
+    "next": "15.1.11",
     "plotly.js-dist-min": "^2.35.2",
     "postcss": "^8.5.1",
     "react": "^19.0.0",
