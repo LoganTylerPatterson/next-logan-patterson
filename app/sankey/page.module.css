@@ -1,0 +1,56 @@
+.pageContainer {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Top control bar */
+.fileInputWrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+
+  padding: 16px 20px;
+  margin-bottom: 24px;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fafafa;
+}
+
+/* File input */
+.fileInputWrapper input[type="file"] {
+  font-size: 14px;
+}
+
+/* Buttons */
+.fileInputWrapper button {
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  cursor: pointer;
+
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.fileInputWrapper button:hover {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+/* Optional: primary-style button */
+.fileInputWrapper button.primary {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.fileInputWrapper button.primary:hover {
+  background: #1e40af;
+}

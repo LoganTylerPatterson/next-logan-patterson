@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+---
+
+## Budget Sankey Generator
+
+Upload an Excel spreadsheet at `/sankey` to visualize incomes and expenses as a Sankey diagram.
+
+- Supports either:
+	- Two columns: label, amount
+	- Three columns: category, label, amount
+	- Or category header rows: a row with a label and an empty amount marks a category; following rows inherit that category.
+- Positive amounts are incomes; negative amounts are expenses.
+- Duplicate labels aggregate by (category, label).
+- Flows: incomes → Budget → Categories → expenses (or Budget → expenses if no category), plus Surplus/Shortfall if needed.
+
+### Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000/sankey and upload a `.xlsx`, `.xls`, or `.csv`.
+
+Sample files:
+- Header rows (2-col): `/samples/budget-sample-categories.csv` (label, amount; category rows have empty amount)
+- 3-column format: `/samples/budget-sample-3col.csv` (category, label, amount)
