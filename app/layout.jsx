@@ -1,10 +1,5 @@
-import { Roboto } from "next/font/google";
+import '@fontsource/bodoni-moda';
 import "./globals.css";
-
-const roboto = Roboto({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Logan Patterson",
@@ -16,7 +11,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={roboto.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 } 
