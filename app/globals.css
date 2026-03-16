@@ -25,7 +25,9 @@ body {
   /* 5. Improve text rendering */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-family: var(--font-family-serif)
+  font-family: var(--font-family-serif);
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* 6. Improve media defaults */
@@ -61,7 +63,21 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ===== Custom Styles ===== */
 :root {
-  --off-white: #f7f4ef;
+  --bg:           #f7f4ef;
+  --text:         #1a1410;
+  --text-subtle:  #9a8878;
+  --border:       #ddd5c8;
+  --hover:        #eee8e0;
   --font-family-serif: 'Bodoni Moda', serif;
-  background: var(--off-white);
+  --font-mono-retro: 'VT323', 'Courier New', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg:          #0e0b08;
+    --text:        #f0ece4;
+    --text-subtle: #6a5e50;
+    --border:      #231e18;
+    --hover:       #1a1510;
+  }
 }
