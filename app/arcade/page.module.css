@@ -1,23 +1,3 @@
-/* ===== Boot ===== */
-
-.boot {
-  width: 100vw;
-  height: 100vh;
-  background: #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-.bootCanvas {
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  display: block;
-  image-rendering: pixelated;
-}
-
 /* ===== Room ===== */
 
 .room {
@@ -28,6 +8,7 @@
   justify-content: center;
   font-family: var(--font-mono-retro), 'Courier New', monospace;
   padding: 2rem 1rem;
+  overflow: hidden;
 }
 
 /* ===== Cabinet ===== */
@@ -36,22 +17,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: cabinetOn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes cabinetOn {
-  0% {
-    clip-path: inset(49.8% 0 49.8% 0);
-    filter: brightness(5);
-  }
-  60% {
-    clip-path: inset(0% 0 0% 0);
-    filter: brightness(1.4);
-  }
-  100% {
-    clip-path: inset(0% 0 0% 0);
-    filter: brightness(1);
-  }
+.enterRight {
+  animation: slideInFromLeft 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes slideInFromLeft {
+  0%   { transform: translateX(120vw); opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
+}
+
+.exitRight {
+  animation: slideOutRight 0.42s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes slideOutRight {
+  0%   { transform: translateX(0);     opacity: 1; }
+  100% { transform: translateX(120vw); opacity: 0; }
 }
 
 /* ===== Marquee ===== */
@@ -424,8 +407,14 @@
 }
 
 .backLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   color: #2a0040;
-  text-decoration: none;
+  font-family: var(--font-mono-retro), 'Courier New', monospace;
+  font-size: inherit;
+  letter-spacing: inherit;
   transition: color 0.15s;
 }
 

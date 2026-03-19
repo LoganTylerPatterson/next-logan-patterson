@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import styles from './page.module.css'
 
 const GAMES = [
@@ -26,49 +26,17 @@ const GAMES = [
   },
 ]
 
-function drawBootStatic(ctx, width, height) {
-  const imageData = ctx.createImageData(width, height)
-  const d = imageData.data
-  for (let i = 0; i < d.length; i += 4) {
-    const v = (Math.random() * 200) | 0
-    d[i]   = (v * 0.8) | 0   // R - pinkish tint
-    d[i+1] = 0
-    d[i+2] = (v * 0.5) | 0   // B
-    d[i+3] = 255
-  }
-  ctx.putImageData(imageData, 0, 0)
-}
-
 export default function ArcadePage() {
-  const [phase, setPhase] = useState('black')
+  const router = useRouter()
   const [gameIdx, setGameIdx] = useState(0)
   const [flashing, setFlashing] = useState(false)
-  const canvasRef = useRef(null)
-  const animRef = useRef(null)
+  const [exiting, setExiting] = useState(false)
   const flashingRef = useRef(false)
   const idxRef = useRef(0)
-
-  useEffect(() => {
-    const t1 = setTimeout(() => setPhase('static'), 300)
-    const t2 = setTimeout(() => setPhase('ready'), 2000)
-    return () => { clearTimeout(t1); clearTimeout(t2) }
-  }, [])
-
-  useEffect(() => {
-    if (phase !== 'static') return
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    const loop = () => {
-      drawBootStatic(ctx, canvas.width, canvas.height)
-      animRef.current = requestAnimationFrame(loop)
-    }
-    loop()
-    return () => cancelAnimationFrame(animRef.current)
-  }, [phase])
+  const exitingRef = useRef(false)
 
   const changeGame = (dir) => {
-    if (flashingRef.current) return
+    if (flashingRef.current || exitingRef.current) return
     flashingRef.current = true
     setFlashing(true)
     setTimeout(() => {
@@ -80,10 +48,29 @@ export default function ArcadePage() {
     }, 200)
   }
 
+  const handleBack = () => {
+    if (exitingRef.current) return
+    exitingRef.current = true
+    setExiting(true)
+    sessionStorage.setItem('fromArcade', '1')
+    setTimeout(() => router.push('/'), 430)
+  }
+
+  const handlePlay = (href) => {
+    if (exitingRef.current) return
+    exitingRef.current = true
+    setExiting(true)
+    setTimeout(() => router.push(href), 430)
+  }
+
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowUp') changeGame(1)
       if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') changeGame(-1)
+      if (e.key === 'Enter') {
+        const game = GAMES[idxRef.current]
+        if (game.available) handlePlay(game.href)
+      }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
@@ -91,24 +78,9 @@ export default function ArcadePage() {
 
   const game = GAMES[gameIdx]
 
-  if (phase !== 'ready') {
-    return (
-      <div className={styles.boot}>
-        {phase === 'static' && (
-          <canvas
-            ref={canvasRef}
-            className={styles.bootCanvas}
-            width={640}
-            height={400}
-          />
-        )}
-      </div>
-    )
-  }
-
   return (
     <main className={styles.room}>
-      <div className={styles.cabinet}>
+      <div className={`${styles.cabinet} ${exiting ? styles.exitRight : styles.enterRight}`}>
 
         {/* Marquee */}
         <div className={styles.marquee}>
@@ -163,9 +135,12 @@ export default function ArcadePage() {
 
             <div className={styles.centerControls}>
               {game.available ? (
-                <Link href={game.href} className={styles.insertBtn}>
+                <button
+                  className={styles.insertBtn}
+                  onClick={() => handlePlay(game.href)}
+                >
                   ▶ INSERT COIN
-                </Link>
+                </button>
               ) : (
                 <button className={styles.insertBtnDisabled} disabled>
                   ✕ LOCKED
@@ -187,7 +162,7 @@ export default function ArcadePage() {
 
         {/* Nav hint */}
         <div className={styles.hint}>
-          <Link href="/" className={styles.backLink}>← BACK TO TV</Link>
+          <button className={styles.backLink} onClick={handleBack}>← BACK TO TV</button>
           <span>{gameIdx + 1} / {GAMES.length}</span>
         </div>
 

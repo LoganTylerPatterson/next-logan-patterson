@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import styles from './page.module.css'
 
 const CHANNELS = [
@@ -67,22 +67,42 @@ function drawStaticFrame(ctx, width, height) {
 }
 
 export default function Home() {
-  const [phase, setPhase] = useState('black') // 'black' | 'static' | 'ready'
+  const router = useRouter()
+  const [phase, setPhase] = useState('black')
   const [channel, setChannel] = useState(0)
   const [flashing, setFlashing] = useState(false)
+  const [exiting, setExiting] = useState(false)
+  const [enterAnim, setEnterAnim] = useState('powerOn') // 'powerOn' | 'fromRight'
   const canvasRef = useRef(null)
   const animRef = useRef(null)
   const flashingRef = useRef(false)
   const channelRef = useRef(0)
+  const exitingRef = useRef(false)
 
-  // Boot sequence
   useEffect(() => {
+    const fromArcade = sessionStorage.getItem('fromArcade')
+    if (fromArcade) {
+      sessionStorage.removeItem('fromArcade')
+      setEnterAnim('fromRight')
+      setPhase('ready')
+      return
+    }
+
+    const alreadyBooted = sessionStorage.getItem('tvBooted')
+    if (alreadyBooted) {
+      setEnterAnim('powerOn')
+      setPhase('ready')
+      return
+    }
+
     const t1 = setTimeout(() => setPhase('static'), 300)
-    const t2 = setTimeout(() => setPhase('ready'), 2100)
+    const t2 = setTimeout(() => {
+      setPhase('ready')
+      sessionStorage.setItem('tvBooted', '1')
+    }, 2100)
     return () => { clearTimeout(t1); clearTimeout(t2) }
   }, [])
 
-  // Static canvas animation
   useEffect(() => {
     if (phase !== 'static') return
     const canvas = canvasRef.current
@@ -97,7 +117,7 @@ export default function Home() {
   }, [phase])
 
   const changeChannel = (dir) => {
-    if (flashingRef.current) return
+    if (flashingRef.current || exitingRef.current) return
     flashingRef.current = true
     setFlashing(true)
     setTimeout(() => {
@@ -109,7 +129,17 @@ export default function Home() {
     }, 200)
   }
 
-  // Keyboard navigation
+  const handleEnter = (href, external) => {
+    if (exitingRef.current) return
+    if (external) {
+      window.open(href, '_blank', 'noopener noreferrer')
+      return
+    }
+    exitingRef.current = true
+    setExiting(true)
+    setTimeout(() => router.push(href), 430)
+  }
+
   useEffect(() => {
     const handler = (e) => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowUp') changeChannel(1)
@@ -136,9 +166,14 @@ export default function Home() {
     )
   }
 
+  const outerClass = [
+    styles.tvOuter,
+    exiting ? styles.exitLeft : (enterAnim === 'fromRight' ? styles.enterFromRight : styles.tvPowerOn),
+  ].join(' ')
+
   return (
     <main className={styles.room}>
-      <div className={styles.tvOuter}>
+      <div className={outerClass}>
 
         {/* Bezel */}
         <div className={styles.tvBezel}>
@@ -166,18 +201,19 @@ export default function Home() {
                   <h2 className={styles.projectTitle}>{ch.name}</h2>
                   <p className={styles.projectDesc}>{ch.desc}</p>
                   {ch.external ? (
-                    <a
-                      href={ch.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
                       className={styles.enterBtn}
+                      onClick={() => handleEnter(ch.href, true)}
                     >
                       ENTER ↗
-                    </a>
+                    </button>
                   ) : (
-                    <Link href={ch.href} className={styles.enterBtn}>
+                    <button
+                      className={styles.enterBtn}
+                      onClick={() => handleEnter(ch.href, false)}
+                    >
                       ENTER →
-                    </Link>
+                    </button>
                   )}
                 </div>
               )}
