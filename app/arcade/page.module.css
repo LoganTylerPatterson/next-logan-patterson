@@ -398,26 +398,30 @@
 .hint {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: clamp(280px, 52vw, 560px);
   margin-top: 1.25rem;
   font-size: clamp(0.55rem, 1vw, 0.7rem);
   letter-spacing: 0.2em;
-  color: #2a0040;
+  color: #6600aa;
   font-family: var(--font-mono-retro), 'Courier New', monospace;
 }
 
 .backLink {
   background: none;
-  border: none;
-  padding: 0;
+  border: 1px solid #6600aa;
+  padding: 0.3rem 0.8rem;
   cursor: pointer;
-  color: #2a0040;
+  color: #cc00ff;
   font-family: var(--font-mono-retro), 'Courier New', monospace;
   font-size: inherit;
   letter-spacing: inherit;
-  transition: color 0.15s;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  border-radius: 2px;
 }
 
 .backLink:hover {
-  color: #cc00ff;
+  background: #cc00ff;
+  color: #000;
+  border-color: #cc00ff;
 }

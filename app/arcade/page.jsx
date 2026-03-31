@@ -52,7 +52,7 @@ export default function ArcadePage() {
     if (exitingRef.current) return
     exitingRef.current = true
     setExiting(true)
-    sessionStorage.setItem('fromArcade', '1')
+    sessionStorage.setItem('tvSkipBoot', '1')
     setTimeout(() => router.push('/'), 430)
   }
 
@@ -71,6 +71,7 @@ export default function ArcadePage() {
         const game = GAMES[idxRef.current]
         if (game.available) handlePlay(game.href)
       }
+      if (e.key === 'Escape' || e.key === 'Backspace') handleBack()
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)

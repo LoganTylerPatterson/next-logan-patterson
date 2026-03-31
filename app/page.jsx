@@ -20,33 +20,16 @@ const CHANNELS = [
     type: 'project',
   },
   {
-    id: 'sankey',
+    id: 'halfbaked',
     num: '03',
-    name: 'BUDGET SANKEY',
-    desc: 'FINANCIAL VISUALIZATION',
-    href: '/sankey',
-    type: 'project',
-  },
-  {
-    id: 'graph',
-    num: '04',
-    name: '3D GRAPH SHADER',
-    desc: 'WEBGL REAL-TIME RENDERING',
-    href: 'https://graph-six-rho.vercel.app/',
-    type: 'project',
-    external: true,
-  },
-  {
-    id: 'branches',
-    num: '05',
-    name: 'BRANCHES',
-    desc: 'DATA EXPLORER',
-    href: '/branches',
+    name: 'HALF BAKED',
+    desc: 'EXPERIMENTS & WIP',
+    href: '/halfbaked',
     type: 'project',
   },
   {
     id: 'nosignal',
-    num: '06',
+    num: '04',
     name: 'NO SIGNAL',
     subtitle: 'MORE CONTENT COMING SOON',
     type: 'nosignal',
@@ -80,9 +63,9 @@ export default function Home() {
   const exitingRef = useRef(false)
 
   useEffect(() => {
-    const fromArcade = sessionStorage.getItem('fromArcade')
-    if (fromArcade) {
-      sessionStorage.removeItem('fromArcade')
+    const skipBoot = sessionStorage.getItem('tvSkipBoot')
+    if (skipBoot) {
+      sessionStorage.removeItem('tvSkipBoot')
       setEnterAnim('fromRight')
       setPhase('ready')
       return
