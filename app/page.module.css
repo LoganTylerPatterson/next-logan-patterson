@@ -28,6 +28,7 @@
   justify-content: center;
   font-family: var(--font-mono-retro), 'Courier New', monospace;
   padding: 2rem 1rem;
+  overflow: hidden;
 }
 
 /* ===== TV outer wrapper ===== */
@@ -36,10 +37,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: tvPowerOn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes tvPowerOn {
+.tvPowerOn {
+  animation: tvPowerOnAnim 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes tvPowerOnAnim {
   0% {
     clip-path: inset(49.8% 0 49.8% 0);
     filter: brightness(4);
@@ -53,6 +57,24 @@
     clip-path: inset(0% 0 0% 0);
     filter: brightness(1);
   }
+}
+
+.exitLeft {
+  animation: slideOutLeft 0.42s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+@keyframes slideOutLeft {
+  0%   { transform: translateX(0);      opacity: 1; }
+  100% { transform: translateX(-120vw); opacity: 0; }
+}
+
+.enterFromRight {
+  animation: slideInFromRight 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes slideInFromRight {
+  0%   { transform: translateX(120vw); opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
 }
 
 /* ===== TV Bezel ===== */

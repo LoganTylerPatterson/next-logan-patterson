@@ -1,56 +1,167 @@
 .pageContainer {
-  padding: 24px;
+  min-height: 100vh;
+  background: radial-gradient(ellipse at 50% 30%, #050f14 0%, #030709 100%);
+  padding: 2rem 1.5rem 3rem;
+  font-family: var(--font-mono-retro), 'Courier New', monospace;
+}
+
+/* ===== Header ===== */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto 1.75rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.15);
+}
+
+.backBtn {
+  background: none;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: rgba(34, 211, 238, 0.5);
+  padding: 0.35rem 0.9rem;
+  font-family: var(--font-mono-retro), 'Courier New', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.12s, color 0.12s;
+}
+
+.backBtn:hover {
+  border-color: rgba(34, 211, 238, 0.8);
+  color: #22d3ee;
+}
+
+.titleBlock {
+  text-align: center;
+}
+
+.title {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: #22d3ee;
+  text-shadow:
+    0 0 20px rgba(34, 211, 238, 0.7),
+    0 0 50px rgba(34, 211, 238, 0.25);
+}
+
+.subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: rgba(34, 211, 238, 0.3);
+  margin-top: 0.3rem;
+}
+
+.headerSpacer {
+  width: 100px;
+}
+
+/* ===== Controls ===== */
+
+.controls {
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(34, 211, 238, 0.12);
+  border-radius: 4px;
+  background: rgba(34, 211, 238, 0.03);
+}
+
+.fileLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: rgba(34, 211, 238, 0.6);
+  padding: 0.4rem 1rem;
+  font-family: var(--font-mono-retro), 'Courier New', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+
+.fileLabel:hover {
+  border-color: #22d3ee;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.fileInput {
+  display: none;
+}
+
+.btn {
+  background: none;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: rgba(34, 211, 238, 0.6);
+  padding: 0.4rem 1rem;
+  font-family: var(--font-mono-retro), 'Courier New', monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: #22d3ee;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.06);
+}
+
+.btnPrimary {
+  background: rgba(34, 211, 238, 0.1);
+  border-color: rgba(34, 211, 238, 0.5);
+  color: #22d3ee;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.12);
+}
+
+.btnPrimary:hover {
+  background: rgba(34, 211, 238, 0.18);
+  border-color: #22d3ee;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.22);
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(34, 211, 238, 0.12);
+}
+
+.fileName {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(34, 211, 238, 0.4);
+  font-style: italic;
+}
+
+/* ===== Chart wrapper ===== */
+
+.chartWrapper {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Top control bar */
-.fileInputWrapper {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
+/* ===== Empty state ===== */
 
-  padding: 16px 20px;
-  margin-bottom: 24px;
-
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  background: #fafafa;
-}
-
-/* File input */
-.fileInputWrapper input[type="file"] {
-  font-size: 14px;
-}
-
-/* Buttons */
-.fileInputWrapper button {
-  padding: 8px 14px;
-  font-size: 14px;
-  font-weight: 500;
-
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  background: #ffffff;
-  cursor: pointer;
-
-  transition: background 0.15s ease, border-color 0.15s ease;
-}
-
-.fileInputWrapper button:hover {
-  background: #f3f4f6;
-  border-color: #9ca3af;
-}
-
-/* Optional: primary-style button */
-.fileInputWrapper button.primary {
-  background: #2563eb;
-  border-color: #2563eb;
-  color: white;
-}
-
-.fileInputWrapper button.primary:hover {
-  background: #1e40af;
+.empty {
+  max-width: 1200px;
+  margin: 5rem auto;
+  text-align: center;
+  color: rgba(34, 211, 238, 0.18);
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  line-height: 2.2;
 }

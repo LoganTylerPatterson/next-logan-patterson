@@ -15,7 +15,15 @@ const CustomNode = (props) => {
   return (
     <g>
       <rect x={x} y={y} width={width} height={height} fill={fill} rx={2} />
-      <text x={x + width + 6} y={y + height / 2} dy={4} fontSize={12}>
+      <text
+        x={x + width + 6}
+        y={y + height / 2}
+        dy={4}
+        fontSize={14}
+        fill="rgba(220, 230, 255, 0.75)"
+        fontFamily="'Courier New', monospace"
+        letterSpacing="0.04em"
+      >
         {payload.name}
       </text>
     </g>
@@ -37,7 +45,7 @@ const CustomLink = (props) => {
       d={d}
       fill="none"
       stroke={stroke}
-      strokeOpacity={0.25}
+      strokeOpacity={0.4}
       strokeWidth={Math.max(1, linkWidth)}
     />
   );
