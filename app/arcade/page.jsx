@@ -15,6 +15,16 @@ const GAMES = [
     available: true,
   },
   {
+    id: 'tetris',
+    num: '02',
+    title: 'TETRIS',
+    genre: 'ARCADE · PUZZLE',
+    blurb: 'FIT THE FALLING BLOCKS. CLEAR THE LINES.',
+    href: '/tetris',
+    credits: 1,
+    available: false,
+  },
+  {
     id: 'locked2',
     num: '??',
     title: '[ CLASSIFIED ]',

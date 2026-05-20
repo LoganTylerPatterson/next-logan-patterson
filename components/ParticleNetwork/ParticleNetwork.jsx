@@ -6,11 +6,13 @@ export default function ParticleNetwork() {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
+    
     const ctx = canvas.getContext("2d");
     const container = canvas.parentElement;
 
-    let width = canvas.width = container.clientWidth;
-    let height = canvas.height = container.clientHeight;
+    let width = canvas.width = container?.clientWidth || window.innerWidth;
+    let height = canvas.height = container?.clientHeight || window.innerHeight;
 
     const PARTICLE_COUNT = 45;
     const CONNECT_DISTANCE = 140;

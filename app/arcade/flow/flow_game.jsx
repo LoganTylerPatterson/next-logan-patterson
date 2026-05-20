@@ -14,6 +14,7 @@ const FlowGame = ({ difficulty, onRestart }) => {
 	const [currentPath, setCurrentPath] = useState([]);
 	const [solutionSegments, setSolutionSegments] = useState([]);
 	const [isTouching, setIsTouching] = useState(false);
+	const [colorPaths, setColorPaths] = useState({});
 
 	const isValidCell = useCallback((x, y, size) => {
 		return x >= 0 && y >= 0 && x < size && y < size;
@@ -112,6 +113,9 @@ const FlowGame = ({ difficulty, onRestart }) => {
 			...seg,
 			color: newColors[i]
 		})));
+		setColorPaths({});
+		setSelectedColor(null);
+		setCurrentPath([]);
 	}, [difficulty, createRandomHamiltonianPath, splitPathIntoSegments]);
 
 	useEffect(() => {
@@ -128,6 +132,19 @@ const FlowGame = ({ difficulty, onRestart }) => {
 		initializeGame();
 	}, [initializeGame]);
 
+	const getEndpointType = useCallback((row, col, color) => {
+		const solution = solutionSegments.find((segment) => segment.color === color);
+		if (!solution) return null;
+
+		if (solution.start[0] === row && solution.start[1] === col) return 'start';
+		if (solution.end[0] === row && solution.end[1] === col) return 'end';
+		return null;
+	}, [solutionSegments]);
+
+	const isEndpointCell = useCallback((row, col, color) => {
+		return getEndpointType(row, col, color) !== null;
+	}, [getEndpointType]);
+
 	const handleStartPath = (row, col) => {
 		const color = grid[row][col];
 		if (color) {
@@ -139,30 +156,53 @@ const FlowGame = ({ difficulty, onRestart }) => {
 	const handleExtendPath = (row, col) => {
 		if (!selectedColor) return;
 
-		const last = currentPath[currentPath.length - 1];
-		const isValid = (
-			Math.abs(row - last[0]) + Math.abs(col - last[1]) === 1 &&
-			!currentPath.some(([r, c]) => r === row && c === col)
-		);
+		setCurrentPath((prev) => {
+			if (prev.length === 0) return prev;
 
-		if (isValid) {
-			setCurrentPath(prev => [...prev, [row, col]]);
-		}
+			const last = prev[prev.length - 1];
+			const isAdjacent = Math.abs(row - last[0]) + Math.abs(col - last[1]) === 1;
+			if (!isAdjacent) return prev;
+
+			const secondLast = prev[prev.length - 2];
+			if (secondLast && secondLast[0] === row && secondLast[1] === col) {
+				return prev.slice(0, -1);
+			}
+
+			const alreadyInPath = prev.some(([r, c]) => r === row && c === col);
+			if (alreadyInPath) return prev;
+
+			const cellColor = grid[row][col];
+			const isEndpoint = isEndpointCell(row, col, selectedColor);
+
+			if (cellColor !== null && !isEndpoint) {
+				return prev;
+			}
+
+			if (cellColor !== null && cellColor !== selectedColor) {
+				return prev;
+			}
+
+			return [...prev, [row, col]];
+		});
 	}
 
 	const handleEndPath = () => {
 		if (currentPath.length > 1) {
-			// doesn't actually make sense to keep track of the entire solution segment, we really just want start and end colors to match
-			const solution = solutionSegments.find(s => s.color === selectedColor);
-			if (solution &&
-				currentPath[0][0] == solution.end[0] &&
-				currentPath[0][1] == solution.end[1] &&
-				currentPath[currentPath.length - 1][0] === solution.start[0] &&
-				currentPath[currentPath.length - 1][1] === solution.start[1] ||
+			const solution = solutionSegments.find((s) => s.color === selectedColor);
+			const startsAtStart = solution &&
 				currentPath[0][0] === solution.start[0] &&
-				currentPath[0][1] === solution.start[1] &&
+				currentPath[0][1] === solution.start[1];
+			const startsAtEnd = solution &&
+				currentPath[0][0] === solution.end[0] &&
+				currentPath[0][1] === solution.end[1];
+			const endsAtStart = solution &&
+				currentPath[currentPath.length - 1][0] === solution.start[0] &&
+				currentPath[currentPath.length - 1][1] === solution.start[1];
+			const endsAtEnd = solution &&
 				currentPath[currentPath.length - 1][0] === solution.end[0] &&
-				currentPath[currentPath.length - 1][1] === solution.end[1]) {
+				currentPath[currentPath.length - 1][1] === solution.end[1];
+
+			if ((startsAtStart && endsAtEnd) || (startsAtEnd && endsAtStart)) {
 				commitPath();
 			}
 		}
@@ -172,32 +212,35 @@ const FlowGame = ({ difficulty, onRestart }) => {
 	};
 
 	const commitPath = () => {
-		 const newGrid = grid.map(row => [...row]);
-		 
-		 // First, find and remove all previous instances of this color
-		 // (except at the endpoint positions which should be preserved)
-		 const solution = solutionSegments.find(s => s.color === selectedColor);
-		 if (solution) {
-		   for (let row = 0; row < newGrid.length; row++) {
-			 for (let col = 0; col < newGrid[row].length; col++) {
-			   if ((row === solution.start[0] && col === solution.start[1]) ||
-				   (row === solution.end[0] && col === solution.end[1])) {
-				 continue;
-			   }
-			   
-			   if (newGrid[row][col] === selectedColor) {
-				 newGrid[row][col] = null;
-			   }
-			 }
-		   }
-		 }
-		 
-		 // Then add the new path
-		 currentPath.forEach(([row, col]) => {
-		   newGrid[row][col] = selectedColor;
-		 });
-		 
-		 setGrid(newGrid);
+		if (!selectedColor) return;
+
+		const solution = solutionSegments.find((segment) => segment.color === selectedColor);
+		if (!solution) return;
+
+		setColorPaths((prev) => ({
+			...prev,
+			[selectedColor]: currentPath
+		}));
+
+		const newGrid = Array.from({ length: grid.length }, () => Array(grid.length).fill(null));
+
+		solutionSegments.forEach((segment) => {
+			newGrid[segment.start[0]][segment.start[1]] = segment.color;
+			newGrid[segment.end[0]][segment.end[1]] = segment.color;
+		});
+
+		const nextPaths = {
+			...colorPaths,
+			[selectedColor]: currentPath
+		};
+
+		Object.entries(nextPaths).forEach(([color, path]) => {
+			(path || []).forEach(([row, col]) => {
+				newGrid[row][col] = color;
+			});
+		});
+
+		setGrid(newGrid);
 	};
 
 	const getCellFromEvent = (e) => {
@@ -219,7 +262,6 @@ const FlowGame = ({ difficulty, onRestart }) => {
 	};
 
 	const handleTouchStart = (e) => {
-		console.log("ye")
 		e.preventDefault();
 		setIsTouching(true);
 		const cell = getCellFromEvent(e);
@@ -240,14 +282,42 @@ const FlowGame = ({ difficulty, onRestart }) => {
 	};
 
 	const size = DIFFICULTY_SETTINGS[difficulty].size;
+	const boardSizeVmin = Math.min(78, size * 13);
+
+	const pathToSvg = (path, color, opacity = 1) => {
+		if (!path || path.length < 2) return null;
+		const toPoint = ([row, col]) => `${col + 0.5},${row + 0.5}`;
+		const d = path.map((pt, i) => `${i === 0 ? 'M' : 'L'}${toPoint(pt)}`).join(' ');
+
+		return (
+			<path
+				key={`${color}-${opacity}-${path.length}`}
+				d={d}
+				fill="none"
+				stroke={color}
+				strokeWidth={0.38}
+				strokeLinecap="round"
+				strokeLinejoin="round"
+				opacity={opacity}
+				filter="url(#glow)"
+			/>
+		);
+	};
+
+	const committedLines = Object.entries(colorPaths).map(([color, path]) => pathToSvg(path, color, 0.92));
+	const activeLine = selectedColor ? pathToSvg(currentPath, selectedColor, 0.75) : null;
+
 	return (
-		<div className="flex flex-col items-center p-4 bg-gray-900 rounded-2xl shadow-2xl border border-gray-700">
+		<div className="flex flex-col items-center gap-4 p-5 bg-slate-900/90 rounded-3xl shadow-2xl border border-slate-600/30 backdrop-blur-sm">
+			<div className="text-slate-400 text-xs tracking-[0.25em] uppercase font-medium">Connect the dots</div>
 			<div
-				className="grid gap-[1vmin] touch-none"
+				className="relative grid touch-none select-none"
 				style={{
 					gridTemplateColumns: `repeat(${size}, 1fr)`,
-					width: `calc(${size} * 12vmin + ${size - 1} * 1vmin)`,
-					boxShadow: '0 0 20px rgba(59, 130, 246, 0.1)'
+					width: `${boardSizeVmin}vmin`,
+					height: `${boardSizeVmin}vmin`,
+					maxWidth: '92vw',
+					maxHeight: '92vw',
 				}}
 				onTouchStart={handleTouchStart}
 				onTouchMove={handleTouchMove}
@@ -256,36 +326,61 @@ const FlowGame = ({ difficulty, onRestart }) => {
 				onPointerMove={handleTouchMove}
 				onPointerUp={handleTouchEnd}
 			>
+				<svg
+					className="absolute inset-0 pointer-events-none z-10"
+					viewBox={`0 0 ${size} ${size}`}
+					preserveAspectRatio="xMidYMid meet"
+					style={{ width: '100%', height: '100%' }}
+				>
+					<defs>
+						<filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+							<feGaussianBlur stdDeviation="0.12" result="blur" />
+							<feMerge>
+								<feMergeNode in="blur" />
+								<feMergeNode in="SourceGraphic" />
+							</feMerge>
+						</filter>
+					</defs>
+					{committedLines}
+					{activeLine}
+				</svg>
 				{grid.map((row, i) =>
-					row.map((cell, j) => (
-						<div
-							key={`${i}-${j}`}
-							className={`relative flex justify-center items-center w-[12vmin] h-[12vmin] transition-all duration-200 ${currentPath.some(([r, c]) => r === i && c === j)
-								? 'bg-opacity-30 shadow-[0_0_15px]'
-								: 'bg-gray-700 hover:bg-gray-600'
-								}`}
-							style={{
-								backgroundColor: grid[i][j] !== null 
-									? `${grid[i][j]}`
-									: undefined,
-								shadowColor: grid[i][j] !== null 
-									? `${grid[i][j]}`
-									: 'transparent'
-							}}
-						>
-							{cell && (
+					row.map((cell, j) => {
+						const inActive = currentPath.some(([r, c]) => r === i && c === j);
+						const isEndpoint = cell && isEndpointCell(i, j, cell);
+						return (
+							<div key={`${i}-${j}`} className="relative aspect-square p-[5%]">
 								<div
-									className="absolute w-[70%] h-[70%] rounded-full z-20 shadow-lg"
-									style={{
-										backgroundColor: cell,
-										boxShadow: `0 0 15px ${cell}44`
-									}}
+									className={`w-full h-full rounded-xl transition-colors duration-150 ${
+										inActive
+											? 'bg-slate-700/90 border border-slate-500/80'
+											: 'bg-slate-800/60 border border-slate-700/50'
+									}`}
 								/>
-							)}
-						</div>
-					))
+								{isEndpoint && (
+									<div
+										className="absolute inset-0 flex items-center justify-center z-20"
+									>
+										<div
+											className="w-[42%] h-[42%] rounded-full border-2 border-white/60"
+											style={{
+												backgroundColor: cell,
+												boxShadow: `0 0 12px ${cell}99, inset 0 1px 2px rgba(255,255,255,0.3)`
+											}}
+										/>
+									</div>
+								)}
+							</div>
+						);
+					})
 				)}
 			</div>
+			<button
+				onClick={onRestart}
+				className="mt-1 px-5 py-2 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-slate-300 text-xs tracking-wider uppercase"
+			>
+				Back
+			</button>
 		</div>
 	);
 }
