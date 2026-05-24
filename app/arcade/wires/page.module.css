@@ -118,6 +118,11 @@
   background: linear-gradient(to right, #fb923c, #fcd34d);
 }
 
+.chipHard {
+  composes: chip;
+  background: linear-gradient(to right, #e8488b, #f799b7);
+}
+
 .buttonLabel {
   margin-top: 1rem;
   font-size: 1.5rem;

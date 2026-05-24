@@ -1,4 +1,4 @@
-# Deep Dive: The Flow Wires Generator (V1)
+# Deep Dive: The Wires Generator (V1)
 
 If you've ever tried to write a puzzle generator, you probably started by placing dots on a grid and trying to connect them. **That is the hardest way to do it.** You'll almost always end up with a board where one path blocks another, making the puzzle impossible.
 
@@ -100,4 +100,4 @@ If a loop didn't get "stapled" to a path properly, it's just a circle floating i
 If two endpoints of the same color are sitting right next to each other, the path is only 1 block long. That's a boring puzzle! The generator rejects any board where a path's "Start" is touching its "End."
 
 ### 3. No Self-Touching (The "Triple Neighbor" Rule)
-In a good Flow puzzle, a path shouldn't "hug" itself. If a path makes a U-turn so tight that one cell is touching three other cells of the same color, it's rejected. This keeps the paths "clean" and ensures there aren't weird, ambiguous ways to solve it.
+In a good Wires puzzle, a path shouldn't "hug" itself. If a path makes a U-turn so tight that one cell is touching three other cells of the same color, it's rejected. This keeps the paths "clean" and ensures there aren't weird, ambiguous ways to solve it.

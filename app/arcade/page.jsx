@@ -5,12 +5,22 @@ import styles from './page.module.css'
 
 const GAMES = [
   {
-    id: 'flow',
+    id: 'wires',
     num: '01',
-    title: 'FLOW',
+    title: 'WIRES',
     genre: 'PUZZLE · SIMULATION',
     blurb: 'CONNECT THE DOTS. FILL THE BOARD.',
-    href: '/flow',
+    href: '/arcade/wires',
+    credits: 1,
+    available: true,
+  },
+  {
+    id: 'flappy',
+    num: '01',
+    title: 'FLAPPY',
+    genre: 'ARCADE · SKILL',
+    blurb: 'RECOMMENDED FOR PHONES, AND THOSE OF SOUND MIND',
+    href: '/arcade/flappy',
     credits: 1,
     available: true,
   },
@@ -41,9 +51,19 @@ export default function ArcadePage() {
   const [gameIdx, setGameIdx] = useState(0)
   const [flashing, setFlashing] = useState(false)
   const [exiting, setExiting] = useState(false)
+  const [zooming, setZooming] = useState(false)
+  const [enterAnim, setEnterAnim] = useState('fromRight')
   const flashingRef = useRef(false)
   const idxRef = useRef(0)
   const exitingRef = useRef(false)
+  // ...
+  useEffect(() => {
+    const fromGame = sessionStorage.getItem('arcadeBackFromGame')
+    if (fromGame) {
+      sessionStorage.removeItem('arcadeBackFromGame')
+      setEnterAnim('fromGame')
+    }
+  }, [])
 
   const changeGame = (dir) => {
     if (flashingRef.current || exitingRef.current) return
@@ -69,8 +89,8 @@ export default function ArcadePage() {
   const handlePlay = (href) => {
     if (exitingRef.current) return
     exitingRef.current = true
-    setExiting(true)
-    setTimeout(() => router.push(href), 430)
+    setZooming(true)
+    setTimeout(() => router.push(href), 800)
   }
 
   useEffect(() => {
@@ -89,9 +109,18 @@ export default function ArcadePage() {
 
   const game = GAMES[gameIdx]
 
+  const cabinetClass = [
+    styles.cabinet,
+    zooming ? styles.zoomIntoScreen : (
+      exiting ? styles.exitRight : (
+        enterAnim === 'fromGame' ? styles.enterZoom : styles.enterRight
+      )
+    )
+  ].join(' ')
+
   return (
     <main className={styles.room}>
-      <div className={`${styles.cabinet} ${exiting ? styles.exitRight : styles.enterRight}`}>
+      <div className={cabinetClass}>
 
         {/* Marquee */}
         <div className={styles.marquee}>

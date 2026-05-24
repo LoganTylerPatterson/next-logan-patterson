@@ -8,10 +8,10 @@
 
 **Scene 1: The Hook - The Universal Struggle**
 *   **Visuals:**
-    *   (0:00-0:15) Fast-paced, high-energy montage of various beautiful, complex Numberlink/Flow puzzles. Quick cuts, vibrant colors.
+    *   (0:00-0:15) Fast-paced, high-energy montage of various beautiful, complex Numberlink/Wires puzzles. Quick cuts, vibrant colors.
     *   (0:15-0:30) Code editor open, cursor blinking on an empty file named `generate_puzzle.py`. A programmer avatar (think Bo Mitra's relatable frustration) types a few lines, then deletes them, sighs. Shows a simple 3x3 grid on a whiteboard, trying to connect (1,1) to (3,3) and (1,3) to (3,1), failing miserably. Eraser marks, confused scribbles.
     *   (0:30-0:45) Glitchy, rapidly changing grid attempting to connect random dots. Paths collide, dead ends appear, cells remain unconnected. Error messages flash: "Path Blocked!", "Unsolvable State!". Each failure is accompanied by a comic sound effect.
-*   **VO (Bo Mitra - slightly exasperated, relatable, starting with a chuckle):** "Alright, let's talk about the universal programmer's delusion. You see a game like Flow, where you connect dots, and you think, 'I can code a generator for that in an afternoon!' Right? Famous last words."
+*   **VO (Bo Mitra - slightly exasperated, relatable, starting with a chuckle):** "Alright, let's talk about the universal programmer's delusion. You see a game like Wires, where you connect dots, and you think, 'I can code a generator for that in an afternoon!' Right? Famous last words."
 *   **OST:** `Generating Puzzles: A Simple Task? (Spoiler: No)`
 *   **VO:** "You try it. You place some random endpoints. You try to grow paths. And then… you hit the wall. Dead ends. Unsolvable layouts. Paths blocking other paths into oblivion. It’s not just hard; it’s an *NP-hard* problem if you're trying to do it 'the obvious way'. Turns out, I was just making things harder. Much, much harder."
 *   **SFX:** Typing sounds, frustrated mouse click, glitchy error sound, "bonk" for path collision.
@@ -20,7 +20,7 @@
 
 **Scene 2: The Paradigm Shift - Embrace the Backward**
 *   **Visuals:**
-    *   (0:45-1:00) A perfectly solved, colorful Flow puzzle animates into existence, paths flowing smoothly. Then, in a dramatic rewind, the paths gracefully *un-draw*, leaving only the vibrant colored endpoints. A rewind effect.
+    *   (0:45-1:00) A perfectly solved, colorful Wires puzzle animates into existence, paths wiring smoothly. Then, in a dramatic rewind, the paths gracefully *un-draw*, leaving only the vibrant colored endpoints. A rewind effect.
     *   (1:00-1:15) A large, stylized "BACKWARD" text appears, with an arrow pointing from a solved puzzle to an empty grid with only endpoints. A subtle, confident underscore highlights "BACKWARD."
 *   **VO (Primeagen - energetic, decisive, a slight smirk in his voice):** "Look, you're doing it wrong. Generating a *solvable* puzzle is computationally brutal. It's a combinatorial explosion! You try to force connections, you'll spend a lifetime debugging. So what's the actual pro move? You don't solve it. You **UN-solve** it."
 *   **OST:** `The Backward Construction Principle`
@@ -85,7 +85,7 @@
     *   (6:15-6:45) **No Self-Touching**: A path draws a tight U-turn, where a single cell touches three other cells of the same color. Visually highlight the "triple neighbor." This flashes red, and a "cheater" label appears. Puzzle resets. Briefly show `has_tripple` function signature.
 *   **VO (Sebastian Lague - explaining consequences, then Primeagen - stern, then Bo Mitra - empathetic):** "Even with intelligent backward generation, we must enforce strict quality criteria. Not every generated 'spaghetti' board is a good puzzle. We run three crucial validation checks before presenting any puzzle to the player."
 *   **OST:** `Puzzle Quality Control` `1. No Isolated Loops: has_loops(grid, uf)`
-*   **VO (Sebastian Lague):** "First, `has_loops` utilizes a Union-Find data structure to ensure that all path segments are part of a continuous flow, each connecting precisely two endpoints. Any disconnected cycles or orphaned paths are immediately rejected."
+*   **VO (Sebastian Lague):** "First, `has_loops` utilizes a Union-Find data structure to ensure that all path segments are part of a continuous wire, each connecting precisely two endpoints. Any disconnected cycles or orphaned paths are immediately rejected."
 *   **OST:** `2. No Adjacent Endpoints: has_pair(grid, uf)`
 *   **VO (Primeagen):** "Next up: `has_pair`. And this one's non-negotiable. If you've got two endpoints of the *same damn color* sitting right next to each other, that's not a puzzle. That's a gimme! It's too easy. This check identifies and rejects such trivialities. Move on!"
 *   **OST:** `3. No Self-Touching: has_tripple(grid, uf)`

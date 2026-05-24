@@ -1,30 +1,38 @@
 "use client"
 import { useState } from 'react';
-import FlowGame from './flow_game';
+import { useArcadeNavigate } from '../useArcadeNavigate';
+import WiresGame from './wires_game';
+import arcadeStyles from '../page.module.css';
 import styles from './page.module.css';
 
 const chipStyles = {
   easy: styles.chipEasy,
   medium: styles.chipMedium,
+  hard: styles.chipHard
 };
 
-function Flow() {
+function Wires() {
   const [difficulty, setDifficulty] = useState(null);
+  const { isExiting, navigateBack } = useArcadeNavigate();
 
   const difficultyOptions = [
     { key: 'easy', label: 'Easy Drift', chip: 'Starter Grid' },
-    { key: 'medium', label: 'Night Current', chip: 'Classic Flow' }
+    { key: 'medium', label: 'Night Current', chip: 'Classic Wires' },
+    { key: 'hard', label: 'Counting Sheep', chip: 'Stiff' }
   ];
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} ${isExiting ? arcadeStyles.zoomOutPage : ''}`}>
       {!difficulty ? (
         <div className={styles.card}>
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <button className={arcadeStyles.backLink} onClick={navigateBack}>← CABINET</button>
+          </div>
           <p className={styles.subtitle}>Insomniac Arcade</p>
           <h1 className={styles.title}>
-            FLOW WIRES
+            WIRES
           </h1>
-          <p className={styles.description}>Connect matching nodes. Every stroke is drawn in real time.</p>
+          <p className={styles.description}></p>
           <div className={styles.grid}>
             {difficultyOptions.map((option) => (
               <button
@@ -41,10 +49,10 @@ function Flow() {
           </div>
         </div>
       ) : (
-        <FlowGame difficulty={difficulty} onRestart={() => setDifficulty(null)} />
+        <WiresGame difficulty={difficulty} onRestart={() => setDifficulty(null)} />
       )}
     </div>
   );
 }
 
-export default Flow;
+export default Wires;

@@ -7,7 +7,7 @@ const EXPERIMENTS = [
   {
     id: 'sankey',
     title: 'BUDGET SANKEY',
-    desc: 'Financial flow visualization. Where does the money go?',
+    desc: 'Financial wires visualization. Where does the money go?',
     status: 'shipped',
     color: '#0a1a10',
     rotate: '1.5deg',
@@ -27,7 +27,7 @@ const EXPERIMENTS = [
   {
     id: 'branches',
     title: 'BRANCHES',
-    desc: 'Data explorer. Still figuring out what it wants to be.',
+    desc: 'Mr doob copy. Looks pretty',
     status: '~70% baked',
     color: '#1a0e00',
     rotate: '2deg',
@@ -46,7 +46,7 @@ const EXPERIMENTS = [
   {
     id: 'shader',
     title: 'RAYMARCHING',
-    desc: 'Signed distance fields in GLSL. The math is cooked, the scene is not.',
+    desc: 'yep',
     status: 'just vibes rn',
     color: '#120a1a',
     rotate: '-1deg',

@@ -1,5 +1,5 @@
 import { Mitm, generatePuzzle, formatPuzzle } from './generator.js';
-import { solve } from './solver.js';
+import { solve } from '../solver/solver.js';
 
 /**
  * Integrated Test using the Python-based Generator (No Length 2 paths)
@@ -10,7 +10,7 @@ const mitm = new Mitm(2, 1);
 mitm.prepare(10);
 
 function runTest(width = 10, height = 10) {
-  console.log(`\n--- Numberlink Test (${width}x${height}) - Python Algorithm ---`);
+  console.log(`\n--- Wires Test (${width}x${height}) - Python Algorithm ---`);
 
   // 1. Generate a puzzle (generator.js strictly forbids adjacent endpoints)
   console.log('[1] Generating Puzzle...');

@@ -1,5 +1,5 @@
 /**
- * Numberlink Generator translated from Python
+ * Wires Generator translated from Python
  */
 
 export class UnionFind {
@@ -108,7 +108,7 @@ function unrotate(x, y, dx, dy) {
 }
 
 export class Mitm {
-  constructor(lrPrice, tPrice) {
+  constructor(lrPrice = 2, tPrice = 1) {
     this.lrPrice = lrPrice;
     this.tPrice = tPrice;
     this.inv = new Map();
@@ -134,7 +134,7 @@ export class Mitm {
       let x = 0, y = 0, dx = 0, dy = 1;
       seen.add(`${x},${y}`);
       const limit = 2 * (Math.abs(xn) + Math.abs(yn));
-      
+
       let failed = false;
       for (let i = 0; i < limit; i++) {
         const r = Math.random();
@@ -163,7 +163,7 @@ export class Mitm {
         }
 
         if (x === xn && y === yn) return new Path(path);
-        
+
         const ends = this._lookup(dx, dy, xn - x, yn - y, dxn, dyn);
         if (ends && ends.length > 0) {
           const path2 = ends[Math.floor(Math.random() * ends.length)];
@@ -205,7 +205,7 @@ export class Mitm {
       for (const { path, end } of this._goodPaths(x1, y1, dy, -dx, budget - this.lrPrice, seen)) {
         yield { path: [R, ...path], end };
       }
-      
+
       seen.add(key1);
       const x2 = x1 + dx, y2 = y1 + dy;
       const key2 = `${x2},${y2}`;
@@ -281,11 +281,11 @@ export class Grid {
       const [xp, yp] = ps[i - 1];
       const [x, y] = ps[i];
       const [xn, yn] = ps[i + 1];
-      
+
       const dx1 = xn - xp;
       const dy1 = yn - yp;
       const s = sign((x - xp) * (yn - y) - (xn - x) * (y - yp));
-      
+
       const key = `${dx1},${dy1},${s}`;
       const val = {
         '1,1,1': '<', '-1,-1,-1': '<',
@@ -295,7 +295,7 @@ export class Grid {
         '0,2,0': '\\', '0,-2,0': '\\',
         '2,0,0': '/', '-2,0,0': '/'
       }[key];
-      
+
       if (val) {
         this.set(x0 - x + y, y0 + x + y, val);
       }
@@ -317,21 +317,21 @@ export class Grid {
           'v|': [[0, 1]], '>|': [[1, 0]],
           'v-': [[0, 1]], '>-': [[1, 0]],
         }[state] || [];
-        
+
         for (const [dx, dy] of unions) {
           if (x + dx < this.w && y + dy < this.h) {
             uf.union([x, y], [x + dx, y + dy]);
           }
         }
-        
+
         const tubeVal = {
           '/-': '┐', '\\-': '┌',
           '/|': '└', '\\|': '┘',
           ' -': '-', ' |': '|',
         }[state] || 'x';
-        
+
         tubeGrid.set(x, y, tubeVal);
-        
+
         if ('\\/v^'.includes(val)) {
           d = (d === '-' ? '|' : '-');
         }
@@ -409,7 +409,7 @@ export function generatePuzzle(w, h, mitm, minNumbers = 0, maxNumbers = 1000) {
     for (const val of stg.grid.values()) if (val === 'x') xCount++;
     const numbers = Math.floor(xCount / 2);
     return numbers >= minNumbers && numbers <= maxNumbers &&
-           !hasLoops(sg, uf) && !hasPair(stg, uf) && !hasTriple(stg, uf);
+      !hasLoops(sg, uf) && !hasPair(stg, uf) && !hasTriple(stg, uf);
   }
 
   const grid = new Grid(2 * w + 1, 2 * h + 1);
@@ -466,7 +466,7 @@ export function formatPuzzle(grid) {
     height: grid.h,
     cells: []
   };
-  
+
   const mapping = new Map();
   let nextId = 1;
 
@@ -487,3 +487,4 @@ export function formatPuzzle(grid) {
   }
   return res;
 }
+

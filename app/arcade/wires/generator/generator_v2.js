@@ -22,7 +22,7 @@ function inside(x, y, w, h) {
   return x >= 0 && x < w && y >= 0 && y < h;
 }
 
-function isFlowHead(x, y, table, w, h) {
+function isWireHead(x, y, table, w, h) {
   let degree = 0;
   for (let i = 0; i < 4; i++) {
     const x1 = x + DX[i];
@@ -36,7 +36,7 @@ function isFlowHead(x, y, table, w, h) {
 
 function canConnect(x1, y1, x2, y2, table, w, h) {
   if (table[y1][x1] === table[y2][x2]) return false;
-  if (!isFlowHead(x1, y1, table, w, h) || !isFlowHead(x2, y2, table, w, h)) return false;
+  if (!isWireHead(x1, y1, table, w, h) || !isWireHead(x2, y2, table, w, h)) return false;
 
   for (let y3 = 0; y3 < h; y3++) {
     for (let x3 = 0; x3 < w; x3++) {
@@ -80,7 +80,7 @@ function follow(x, y, x0, y0, table, w, h) {
   return [x, y];
 }
 
-function layFlow(x, y, table, w, h) {
+function layWire(x, y, table, w, h) {
   const dirs = shuffleArray([0, 1, 2, 3]);
   for (const i of dirs) {
     const x1 = x + DX[i];
@@ -88,7 +88,7 @@ function layFlow(x, y, table, w, h) {
     if (inside(x1, y1, w, h) && canConnect(x, y, x1, y1, table, w, h)) {
       fill(x1, y1, table[y][x], table, w, h);
       const [x2, y2] = follow(x1, y1, x, y, table, w, h);
-      layFlow(x2, y2, table, w, h);
+      layWire(x2, y2, table, w, h);
       return;
     }
   }
@@ -145,13 +145,13 @@ export function generateNumberlink(w, h) {
     }
   }
 
-  // 4) Merge flows
+  // 4) Merge wires
   const positions = shuffleArray(Array.from({ length: w * h }, (_, i) => i));
   for (const p of positions) {
     const x = p % w;
     const y = Math.floor(p / w);
-    if (isFlowHead(x, y, table, w, h)) {
-      layFlow(x, y, table, w, h);
+    if (isWireHead(x, y, table, w, h)) {
+      layWire(x, y, table, w, h);
     }
   }
 
@@ -164,7 +164,7 @@ export function generateNumberlink(w, h) {
   const visited = new Set();
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
-      if (isFlowHead(x, y, table, w, h)) {
+      if (isWireHead(x, y, table, w, h)) {
         const rawColor = table[y][x];
         if (!colorMap.has(rawColor)) {
           colorMap.set(rawColor, nextColor++);
