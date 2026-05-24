@@ -260,7 +260,7 @@ const WiresGame = ({ difficulty, onRestart }) => {
         d={d}
         fill="none"
         stroke={color}
-        strokeWidth={0.38}
+        strokeWidth={0.42}
         strokeLinecap="round"
         strokeLinejoin="round"
         opacity={opacity}
@@ -269,20 +269,25 @@ const WiresGame = ({ difficulty, onRestart }) => {
     );
   };
 
-  const committedLines = Object.entries(colorPaths).map(([color, path]) => pathToSvg(path, color, 0.92));
-  const activeLine = selectedColor ? pathToSvg(currentPath, selectedColor, 0.75, false) : null;
+  const committedLines = Object.entries(colorPaths).map(([color, path]) => pathToSvg(path, color, 0.95));
+  const activeLine = selectedColor ? pathToSvg(currentPath, selectedColor, 0.8, true) : null;
 
   return (
-    <div className="flex flex-col items-center gap-4 p-5 bg-slate-900/90 rounded-3xl shadow-2xl border border-slate-600/30 backdrop-blur-sm">
-      <div className="text-slate-400 text-xs tracking-[0.25em] uppercase font-medium">Connect the dots</div>
+    <div className="flex flex-col items-center gap-6 p-8 bg-[#050810] rounded-[2rem] shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-cyan-500/20 backdrop-blur-md relative overflow-hidden">
+      {/* Scanline effect */}
+      <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] z-50"></div>
+      
+      <div className="text-cyan-400 text-[0.65rem] tracking-[0.4em] uppercase font-black drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]">System Terminal // Wires</div>
+      
       <div
-        className="relative grid touch-none select-none"
+        className="relative grid touch-none select-none p-1 bg-[#0a0f1a] rounded-xl border border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.15)]"
         style={{
           gridTemplateColumns: `repeat(${size}, 1fr)`,
           width: `${boardSizeVmin}vmin`,
           height: `${boardSizeVmin}vmin`,
           maxWidth: '92vw',
           maxHeight: '92vw',
+          backgroundImage: 'radial-gradient(circle at center, #111827 0%, #0a0f1a 100%)',
         }}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -291,16 +296,21 @@ const WiresGame = ({ difficulty, onRestart }) => {
         onPointerMove={handleTouchMove}
         onPointerUp={handleTouchEnd}
       >
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 pointer-events-none opacity-20" 
+             style={{ backgroundImage: `linear-gradient(to right, #06b6d4 1px, transparent 1px), linear-gradient(to bottom, #06b6d4 1px, transparent 1px)`, 
+                      backgroundSize: `${100/size}% ${100/size}%` }}></div>
+
         {grid.map((row, i) =>
           row.map((cell, j) => {
             const inActive = currentPath.some(([r, c]) => r === i && c === j);
             const isEndpoint = cell && isEndpointCell(i, j, cell);
             return (
-              <div key={`${i}-${j}`} className="relative aspect-square p-[5%]">
+              <div key={`${i}-${j}`} className="relative aspect-square p-[12%]">
                 <div
-                  className={`w-full h-full rounded-xl transition-colors duration-150 ${inActive
-                    ? 'bg-slate-700/90 border border-slate-500/80'
-                    : 'bg-slate-800/60 border border-slate-700/50'
+                  className={`w-full h-full rounded-lg transition-all duration-300 ${inActive
+                    ? 'bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.1)] border border-white/20'
+                    : 'bg-black/40 border border-white/5'
                     }`}
                 />
                 {isEndpoint && (
@@ -308,12 +318,15 @@ const WiresGame = ({ difficulty, onRestart }) => {
                     className="absolute inset-0 flex items-center justify-center z-20"
                   >
                     <div
-                      className="w-[42%] h-[42%] rounded-full border-2 border-white/60"
+                      className="w-[50%] h-[50%] rounded-full border-[3px] border-white animate-pulse"
                       style={{
                         backgroundColor: cell,
-                        boxShadow: `0 0 12px ${cell}99, inset 0 1px 2px rgba(255,255,255,0.3)`
+                        boxShadow: `0 0 20px ${cell}, 0 0 40px ${cell}66, inset 0 0 10px rgba(255,255,255,0.8)`,
+                        filter: 'brightness(1.2) contrast(1.2)'
                       }}
                     />
+                    <div className="absolute w-[70%] h-[70%] rounded-full border border-white/20 animate-ping opacity-20"
+                         style={{ borderColor: cell }}></div>
                   </div>
                 )}
               </div>
@@ -327,23 +340,24 @@ const WiresGame = ({ difficulty, onRestart }) => {
           style={{ width: '100%', height: '100%' }}
         >
           <defs>
-            <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-              <feGaussianBlur stdDeviation="0.12" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
+            <filter id="glow" filterUnits="userSpaceOnUse" x="-1" y="-1" width={size + 2} height={size + 2}>
+              <feGaussianBlur stdDeviation="0.15" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              <feComponentTransfer>
+                <feFuncA type="linear" slope="2" />
+              </feComponentTransfer>
             </filter>
           </defs>
           {committedLines}
           {activeLine}
         </svg>
       </div>
+      
       <button
         onClick={onRestart}
-        className="mt-1 px-5 py-2 rounded-xl bg-slate-700/80 hover:bg-slate-600 text-slate-300 text-xs tracking-wider uppercase"
+        className="mt-2 px-8 py-3 rounded-full bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-400 text-[0.7rem] tracking-[0.3em] uppercase font-bold border border-cyan-500/30 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.4)] hover:scale-105"
       >
-        Back
+        Terminate Session
       </button>
     </div>
   );
