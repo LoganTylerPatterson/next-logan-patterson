@@ -56,7 +56,21 @@ export default function ArcadePage() {
   const flashingRef = useRef(false)
   const idxRef = useRef(0)
   const exitingRef = useRef(false)
-  // ...
+
+  const touchStartX = useRef(null);
+
+  const handleScreenTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  }
+
+  const handleScreenTouchEnd = (e) => {
+    if (touchStartX.current === null) return;
+    
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    touchStartX.current = null;
+    if (Math.abs(deltaX) < 40) return;
+    changeGame(deltaX < 0 ? 1 : -1);
+  }
   useEffect(() => {
     const fromGame = sessionStorage.getItem('arcadeBackFromGame')
     if (fromGame) {
@@ -136,7 +150,7 @@ export default function ArcadePage() {
         <div className={styles.cabinetBody}>
 
           {/* Screen */}
-          <div className={`${styles.screen} ${flashing ? styles.flash : ''}`}>
+          <div className={`${styles.screen} ${flashing ? styles.flash : ''}`} onTouchStart={handleScreenTouchStart} onTouchEnd={handleScreenTouchEnd}>
             <div className={styles.scanlines} aria-hidden="true" />
             <div className={styles.vignette} aria-hidden="true" />
 

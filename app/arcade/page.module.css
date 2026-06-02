@@ -455,3 +455,181 @@
   color: #000;
   border-color: #cc00ff;
 }
+
+/* Nav buttons (replace joystick) */
+.navBtn {
+  background: #1a1030;
+  border: 1px solid #6600aa;
+  color: #cc00ff;
+  width: 44px;
+  height: 44px;
+  font-family: var(--font-mono-retro), 'Courier New', monospace;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s, color 0.12s;
+}
+
+.navBtn:hover {
+  background: #cc00ff;
+  color: #000;
+}
+
+.joystickArea {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.arcadeBtn {
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.arcadeBtn:active {
+  transform: translateY(2px);
+}
+
+.hintNav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hintNavBtn {
+  background: none;
+  border: 1px solid #6600aa;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  color: #cc00ff;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  border-radius: 2px;
+}
+
+.hintNavBtn:hover {
+  background: #cc00ff;
+  color: #000;
+}
+
+.hintCount {
+  min-width: 3.5rem;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .room {
+    padding: 1rem 0.75rem;
+    align-items: center;
+  }
+
+  .cabinet {
+    width: calc(100vw - 1.25rem);
+  }
+
+  .marquee,
+  .cabinetBody,
+  .cabinetBase,
+  .hint {
+    width: min(100%, calc(100vw - 1.5rem));
+  }
+
+  .marquee {
+    padding: 0.65rem 0.75rem 0.5rem;
+  }
+
+  .marqueeText {
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+  }
+
+  .bulb {
+    width: 5px;
+    height: 5px;
+  }
+
+  .marqueeLights {
+    gap: 0.25rem;
+  }
+
+  .cabinetBody {
+    padding: 10px 10px 0;
+  }
+
+  .screenContent {
+    padding: 0.75rem 0.65rem;
+  }
+
+  .genre {
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
+  }
+
+  .gameTitle {
+    font-size: clamp(1.15rem, 7vw, 1.6rem);
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+
+  .blurb {
+    font-size: 0.5rem;
+    letter-spacing: 0.08em;
+    line-height: 1.45;
+    margin-bottom: 0.9rem;
+    padding: 0 0.25rem;
+  }
+
+  .insertPrompt {
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+  }
+
+  .slotNum {
+    font-size: 0.65rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .controlPanel {
+    padding: 0.75rem 0.65rem 0.9rem;
+    gap: 0.5rem;
+  }
+
+  .insertBtn,
+  .insertBtnDisabled {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    padding: 0.45rem 0.65rem;
+  }
+
+  .arcadeBtn {
+    width: 22px;
+    height: 22px;
+  }
+
+  .buttonCluster {
+    gap: 0.35rem;
+  }
+
+  .hint {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin-top: 0.85rem;
+  }
+
+  .hintNav {
+    justify-content: space-between;
+  }
+
+  .backLink {
+    text-align: center;
+    width: 100%;
+  }
+}
