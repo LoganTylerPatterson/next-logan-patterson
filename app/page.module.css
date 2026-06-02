@@ -404,3 +404,68 @@
   color: #2a3a2a;
   font-family: var(--font-mono-retro), 'Courier New', monospace;
 }
+
+/* ===== Mobile: fit long channel titles in CRT ===== */
+@media (max-width: 480px) {
+  .screenContent {
+    padding: 0.85rem 0.75rem;
+  }
+
+  .stationTag,
+  .nowPlaying {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    margin-bottom: 0.75rem;
+  }
+
+  .bigName {
+    font-size: clamp(1.1rem, 5.5vw, 1.45rem);
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+  }
+
+  .homeSubtitle {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    margin-top: 0.5rem;
+  }
+
+  .homeHint {
+    font-size: 0.5rem;
+    letter-spacing: 0.12em;
+    margin-top: 1.25rem;
+  }
+
+  .projectTitle {
+    font-size: clamp(1rem, 5vw, 1.35rem);
+    letter-spacing: 0.03em;
+    line-height: 1.25;
+  }
+
+  .projectDesc {
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 1.25rem;
+  }
+
+  .enterBtn {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    padding: 0.4rem 1rem;
+  }
+
+  .noSignalMain {
+    font-size: clamp(1.4rem, 6vw, 2rem);
+    letter-spacing: 0.12em;
+  }
+
+  .noSignalSub {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+  }
+
+  .chBug {
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+  }
+}
