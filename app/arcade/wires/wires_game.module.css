@@ -1,0 +1,121 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  overflow: hidden;
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  border-radius: 2rem;
+  background: #050810;
+  padding: 1rem;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+.scanlineOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 2px, 3px 100%;
+}
+
+.title {
+  color: rgb(34, 211, 238);
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px rgba(34, 211, 238, 0.8);
+}
+
+.board {
+  position: relative;
+  display: grid;
+  touch-action: none;
+  user-select: none;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 0.75rem;
+  background: #0a0f1a;
+  padding: 0.25rem;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+}
+
+.gridPattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.cell {
+  position: relative;
+  aspect-ratio: 1 / 1;
+}
+
+.cellFill {
+  width: 100%;
+  height: 100%;
+  border-radius: 0.5rem;
+  transition: all 300ms;
+}
+
+.cellFillActive {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.cellFillInactive {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.endpointWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.endpointCore {
+  width: 50%;
+  height: 50%;
+  border: 3px solid white;
+  border-radius: 9999px;
+}
+
+.pathsSvg {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.restartButton {
+  margin-top: 0.5rem;
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: 9999px;
+  background: rgba(8, 51, 68, 0.4);
+  color: rgb(34, 211, 238);
+  cursor: pointer;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  padding: 0.75rem 2rem;
+  text-transform: uppercase;
+  transition: all 200ms ease;
+}
+
+.restartButton:hover {
+  background: rgba(22, 78, 99, 0.6);
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+  transform: scale(1.05);
+}

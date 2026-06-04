@@ -11,7 +11,7 @@ export function useArcadeNavigate() {
     sessionStorage.setItem('arcadeBackFromGame', '1')
     setTimeout(() => {
       router.push('/arcade')
-    }, 600) // Duration of the zoom-out animation
+    }, 600)
   }, [router])
 
   return { isExiting, navigateBack }

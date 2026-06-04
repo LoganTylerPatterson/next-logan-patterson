@@ -34,17 +34,17 @@ const CHANNELS = [
     subtitle: 'MORE CONTENT COMING SOON',
     type: 'nosignal',
   },
-]
+];
 
 function drawStaticFrame(ctx, width, height) {
   const imageData = ctx.createImageData(width, height)
   const d = imageData.data
   for (let i = 0; i < d.length; i += 4) {
     const v = (Math.random() * 220) | 0
-    d[i]   = 0
-    d[i+1] = (v * 0.85) | 0
-    d[i+2] = 0
-    d[i+3] = 255
+    d[i] = 0
+    d[i + 1] = (v * 0.85) | 0
+    d[i + 2] = 0
+    d[i + 3] = 255
   }
   ctx.putImageData(imageData, 0, 0)
 }

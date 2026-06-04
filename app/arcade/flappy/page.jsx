@@ -14,21 +14,24 @@ export default function Flappy() {
   const framesRef = useRef(0);
   const animationIdRef = useRef(null);
 
+  const lastTimeRef = useRef(0);
+
   const birdRef = useRef({
     x: 0,
     y: 0,
     width: 32,
     height: 32,
     velocity: 0,
-    gravity: 0.2,
-    jump: -5.5,
+    gravity: 0.4,
+    jump: -6,
   });
 
   const pipesRef = useRef({
     items: [],
     width: 70,
-    gap: 165,
-    dx: 2.2,
+    gap: 100,
+    dx: 4,
+    spawnTimer: 0,
   });
 
   // Sync state with refs safely
@@ -48,7 +51,7 @@ export default function Flappy() {
       const container = canvasRef.current.parentElement;
       canvasRef.current.width = container.clientWidth;
       canvasRef.current.height = container.clientHeight;
-      
+
       // Calibrate baseline positioning
       birdRef.current.x = canvasRef.current.width * 0.2;
       if (gameStateRef.current === 'START') {
@@ -60,7 +63,7 @@ export default function Flappy() {
   useEffect(() => {
     handleResize();
     window.addEventListener('resize', handleResize);
-    
+
     // Fire up game loop immediately just like the HTML script does
     animationIdRef.current = requestAnimationFrame(loop);
 
@@ -80,9 +83,9 @@ export default function Flappy() {
     birdRef.current.y = canvas.height / 2;
     birdRef.current.velocity = 0;
     pipesRef.current.items = [];
+    pipesRef.current.spawnTimer = 0; // Reset timer here
     framesRef.current = 0;
   };
-
   const gameOver = () => {
     if (gameStateRef.current !== "PLAYING") return;
     gameStateRef.current = "GAMEOVER";
@@ -91,13 +94,14 @@ export default function Flappy() {
     setStartBtnText("GO AGAIN [Tap]");
   };
 
-  const update = () => {
+  const update = (dtScale) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const bird = birdRef.current;
-    bird.velocity += bird.gravity;
-    bird.y += bird.velocity;
+    // Apply 60FPS-normalized delta time to baseline values
+    bird.velocity += bird.gravity * dtScale;
+    bird.y += bird.velocity * dtScale;
 
     // Bottom collision
     if (bird.y + bird.height >= canvas.height - 10) {
@@ -111,9 +115,12 @@ export default function Flappy() {
     }
 
     const pipes = pipesRef.current;
-    
-    // Spawn every 130 frames precisely matching the HTML script logic
-    if (framesRef.current % 130 === 0) {
+
+    // Track spawning using time scale instead of raw frames
+    pipes.spawnTimer += dtScale;
+    if (pipes.spawnTimer >= 90) {
+      pipes.spawnTimer -= 90; // Reset timer while preserving overflow
+
       const minTop = 100;
       const maxTop = canvas.height - pipes.gap - 100;
       const topPosition = Math.max(minTop, Math.min(maxTop, Math.random() * (canvas.height - pipes.gap - 100)));
@@ -128,7 +135,8 @@ export default function Flappy() {
 
     for (let i = 0; i < pipes.items.length; i++) {
       const p = pipes.items[i];
-      p.x -= pipes.dx;
+      // Scale pipe movement by delta time
+      p.x -= pipes.dx * dtScale;
 
       // Tight alignment box matching the original vector hit borders
       const birdPadding = 4;
@@ -158,6 +166,37 @@ export default function Flappy() {
     }
   };
 
+  const loop = (timestamp) => {
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      animationIdRef.current = requestAnimationFrame(loop);
+      return;
+    }
+
+    // Fix the first-frame timestamp jump bug
+    if (!lastTimeRef.current) {
+      lastTimeRef.current = timestamp;
+    }
+
+    const dt = timestamp - lastTimeRef.current;
+    lastTimeRef.current = timestamp;
+
+    // Normalize delta time to a 60 FPS baseline (16.67ms per frame)
+    const dtScale = dt / 16.67;
+
+    const ctx = canvas.getContext('2d');
+
+    if (gameStateRef.current === "PLAYING") {
+      update(dtScale);
+    }
+
+    draw(ctx);
+
+    // Keep frames incrementing purely for the visual background neon pulse animation
+    framesRef.current += dtScale;
+    animationIdRef.current = requestAnimationFrame(loop);
+  };
+
   const draw = (ctx) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -171,7 +210,7 @@ export default function Flappy() {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.strokeStyle = `rgba(100, 0, 100, ${Math.sin(frames * 0.05) * 0.2 + 0.3})`; 
+    ctx.strokeStyle = `rgba(100, 0, 100, ${Math.sin(frames * 0.05) * 0.2 + 0.3})`;
     ctx.lineWidth = 1;
     const gridSpacing = 50;
     const speedOffset = (frames * pipesRef.current.dx) % gridSpacing;
@@ -228,7 +267,7 @@ export default function Flappy() {
     ctx.strokeStyle = "#ff00ff";
     ctx.lineWidth = 3;
     ctx.strokeRect(bird.x, bird.y, bird.width, bird.height);
-    
+
     // Retro style eye & wing lines
     ctx.fillStyle = "#000";
     ctx.fillRect(bird.x + bird.width - 12, bird.y + 8, 6, 6);
@@ -237,24 +276,6 @@ export default function Flappy() {
     ctx.lineTo(bird.x + 15, bird.y + bird.height / 2);
     ctx.stroke();
     ctx.shadowBlur = 0;
-  };
-
-  const loop = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) {
-      animationIdRef.current = requestAnimationFrame(loop);
-      return;
-    }
-
-    const ctx = canvas.getContext('2d');
-
-    if (gameStateRef.current === "PLAYING") {
-      update();
-    }
-    
-    draw(ctx);
-    framesRef.current++; 
-    animationIdRef.current = requestAnimationFrame(loop);
   };
 
   const handleInput = (e) => {
@@ -270,12 +291,10 @@ export default function Flappy() {
   };
 
   useEffect(() => {
-    window.addEventListener('mousedown', handleInput);
-    window.addEventListener('touchstart', handleInput, { passive: false });
+    window.addEventListener('pointerdown', handleInput, { passive: false });
     window.addEventListener('keydown', handleInput);
     return () => {
-      window.removeEventListener('mousedown', handleInput);
-      window.removeEventListener('touchstart', handleInput);
+      window.removeEventListener('pointerdown', handleInput);
       window.removeEventListener('keydown', handleInput);
     };
   }, []);

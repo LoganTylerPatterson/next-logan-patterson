@@ -4,6 +4,7 @@ import { useArcadeNavigate } from '../useArcadeNavigate';
 import WiresGame from './wires_game';
 import arcadeStyles from '../page.module.css';
 import styles from './page.module.css';
+import { CornerUpLeft } from 'react-feather';
 
 const chipStyles = {
   easy: styles.chipEasy,
@@ -49,7 +50,17 @@ function Wires() {
           </div>
         </div>
       ) : (
-        <WiresGame difficulty={difficulty} onRestart={() => setDifficulty(null)} />
+        <div className={styles.gameLayout}>
+          <button
+            onClick={() => setDifficulty(null)}
+            className={styles.restartButton}
+          >
+            <CornerUpLeft />
+          </button>
+          <div className={styles.gameCenter}>
+            <WiresGame difficulty={difficulty} onRestart={() => setDifficulty(null)} />
+          </div>
+        </div>
       )}
     </div>
   );
